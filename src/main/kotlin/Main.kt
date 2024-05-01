@@ -8,7 +8,6 @@ import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPEvent
 import kotlinx.coroutines.runBlocking
 
-
 fun handleRequest(request: APIGatewayV2HTTPEvent, context: Context) {
     val distributionId = request.queryStringParameters["distributionId"]!!
     println("distributionId: $distributionId")

@@ -1,4 +1,3 @@
-
 # serverless.yml
 service: delete-cloud-front-distribution
 
@@ -20,6 +19,23 @@ functions:
     timeout: 300
     memorySize: 1024
     role: MyCustRole67
+    events:
+      - eventBridge:
+          pattern:
+            source:
+              - aws.cloudwatch
+            detail-type:
+              - CloudWatch Alarm State Change
+            resources:
+                - arn:aws:cloudwatch:us-east-1:${aws:accountId}:alarm:TooManyRequests
+            detail:
+              state:
+                value:
+                  - ALARM
+          inputTransformer:
+            inputPathsMap:
+              distributionId: '$.detail.configuration.metrics[0].metricStat.metric.dimensions.DistributionId'
+            inputTemplate: '{"queryStringParameters": {"distributionId": <distributionId>}}'
 
 resources:
   Resources:
@@ -37,14 +53,6 @@ resources:
                   - lambda.amazonaws.com
               Action: sts:AssumeRole
         Policies:
-          - PolicyName: myPolicyName
-            PolicyDocument:
-              Version: '2012-10-17'
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - events:*
-                  Resource: "*"
           - PolicyName: myPolicyNameCloudWatch
             PolicyDocument:
               Version: '2012-10-17'
