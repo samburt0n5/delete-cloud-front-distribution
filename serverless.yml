@@ -1,0 +1,63 @@
+
+# serverless.yml
+service: delete-cloud-front-distribution
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'prod'}
+  region: ${env:AWS_REGION, 'us-east-1'}
+  ecr:
+    images:
+      delete-cloud-front-distribution:
+        path: ./
+        platform: linux/amd64
+
+functions:
+  delete-cloud-front-distribution:
+    image:
+      name: delete-cloud-front-distribution
+    name: ${sls:stage}-delete-cloud-front-distribution
+    timeout: 300
+    memorySize: 1024
+    role: MyCustRole67
+
+resources:
+  Resources:
+    MyCustRole67:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: /my/cust/path/
+        RoleName: MyCustRole67
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: myPolicyName
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - events:*
+                  Resource: "*"
+          - PolicyName: myPolicyNameCloudWatch
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:*
+                  Resource: "*"
+          - PolicyName: myPolicyNameCloudfront
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - cloudfront:*
+                  Resource: "*"
