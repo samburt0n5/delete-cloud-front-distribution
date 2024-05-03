@@ -1,23 +1,23 @@
-# serverless.yml
 service: delete-cloud-front-distribution
 
 provider:
   name: aws
   stage: ${opt:stage, 'prod'}
   region: ${env:AWS_REGION, 'us-east-1'}
-  ecr:
-    images:
-      delete-cloud-front-distribution:
-        path: ./
-        platform: linux/amd64
+
+
+package:
+  individually: true
 
 functions:
   delete-cloud-front-distribution:
-    image:
-      name: delete-cloud-front-distribution
     name: ${sls:stage}-delete-cloud-front-distribution
     timeout: 300
     memorySize: 1024
+    package:
+      artifact: build/libs/delete-cloud-front-distribution-all.jar
+    handler: MainKt::handleRequest
+    runtime: java17
     role: MyCustRole67
     events:
       - eventBridge:

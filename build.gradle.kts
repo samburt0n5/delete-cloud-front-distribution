@@ -3,10 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.9.22"
     application
+    id("com.github.johnrengelman.shadow") version "7.0.0"
 }
-
-group = "org.example"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -15,7 +13,7 @@ repositories {
 dependencies {
     implementation("com.amazonaws:aws-lambda-java-core:1.2.2")
     implementation("com.amazonaws:aws-lambda-java-events:3.11.1")
-    implementation("aws.sdk.kotlin:cloudfront-jvm:0.29.1-beta")
+    implementation("aws.sdk.kotlin:cloudfront-jvm:1.2.3")
     testImplementation(kotlin("test"))
 }
 
@@ -29,13 +27,4 @@ tasks.withType<KotlinCompile> {
 
 application {
     mainClass.set("MainKt")
-}
-
-tasks.register<Copy>("copyRuntimeDependencies") {
-    from(configurations.runtimeClasspath)
-    into("build/dependency")
-}
-
-tasks.build {
-    dependsOn("copyRuntimeDependencies")
 }

@@ -7,8 +7,7 @@ This app uses the [serverless](https://www.serverless.com/framework/docs/getting
 $ ./gradlew build
 ```
 
-### Deploy (Builds image and deploys to aws)
-Note: If running for the first time you may need to build docker image first with `docker build . -t delete-cloud-front-distribution`
+### Deploy (Deploys jar under build/libs)
 ```bash
 $ sls deploy
 ```
@@ -16,4 +15,9 @@ $ sls deploy
 ### Remove
 ```bash
 $ sls remove
+```
+
+### Invoke (Optional: Manually run the func, replace <distributionId>)
+```bash
+$ sls invoke --function delete-cloud-front-disribution --data '{"queryStringParameters": {"distributionId": "<distributionId>"}}'
 ```
